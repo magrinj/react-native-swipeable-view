@@ -1,0 +1,33 @@
+{
+  "name": "react-native-swipeable-view",
+  "version": "0.0.1",
+  "description": "iOS-style swipeout buttons behind component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:magrin_j/react-native-swipeable-view.git"
+  },
+  "keywords": [
+    "react-native-component",
+    "react-native",
+    "react-component",
+    "ios",
+    "android",
+    "swipeout",
+    "button",
+    "swipe",
+    "ui"
+  ],
+  "author": "Jeremy Magrin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/magrin_j/react-native-swipeable-view/issues"
+  },
+  "homepage": "https://gitlab.com/magrin_j/react-native-swipeable-view",
+  "peerDependencies": {
+    "react-native": ">=0.20.0"
+  }
+}
