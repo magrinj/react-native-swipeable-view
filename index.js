@@ -59,7 +59,7 @@ const RIGHT_SWIPE_BOUNCE_BACK_DURATION = 300;
 */
 const RIGHT_SWIPE_THRESHOLD = 30 * SLOW_SPEED_SWIPE_FACTOR;
 
-class Swipeout extends Component {
+class SwipeableView extends Component {
 
   static propTypes = {
     children: PropTypes.any,
@@ -464,4 +464,4 @@ class Swipeout extends Component {
   }
 };
 
-module.exports = Swipeout;
+module.exports = SwipeableView;
