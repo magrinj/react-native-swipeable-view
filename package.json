@@ -8,12 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.com:magrin_j/react-native-swipeable-view.git"
+    "url": "git+ssh://git@gitlab.com/magrin_j/react-native-swipeable-view.git"
   },
   "keywords": [
     "react-native-component",
     "react-native",
     "react-component",
+    "swipeable",
     "ios",
     "android",
     "swipeout",
