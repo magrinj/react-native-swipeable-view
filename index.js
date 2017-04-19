@@ -126,7 +126,7 @@ class SwipeableView extends Component {
       onPanResponderRelease: this._handlePanResponderEnd.bind(this),
       onPanResponderTerminationRequest: this._onPanResponderTerminationRequest.bind(this),
       onPanResponderTerminate: this._handlePanResponderEnd.bind(this),
-      onShouldBlockNativeResponder: (event, gestureState) => false,
+      onShouldBlockNativeResponder: () => false,
     });
   }
 
@@ -163,7 +163,7 @@ class SwipeableView extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const { shouldBounceOnMount } = this.props;
 
     if (shouldBounceOnMount && !nextProps.shouldBounceOnMount) {
@@ -174,7 +174,7 @@ class SwipeableView extends Component {
     return true;
   }
 
-  _onPanResponderTerminationRequest(event, gestureState) {
+  _onPanResponderTerminationRequest() {
     return false;
   }
 
@@ -319,7 +319,7 @@ class SwipeableView extends Component {
     }
   }
 
-  _handlePanResponderGrant(event, gestureState) {
+  _handlePanResponderGrant() {
   }
 
   _handleMoveShouldSetPanResponderCapture(event, gestureState) {
@@ -332,20 +332,20 @@ class SwipeableView extends Component {
   }
 
   _btnWidth(btn) {
-    let hasCustomWidth = btn.props && btn.props.style && btn.props.style.width;
+    const hasCustomWidth = btn.props && btn.props.style && btn.props.style.width;
     return hasCustomWidth ? btn.props.style.width : false;
   }
 
   _btnsWidthTotal(width, group) {
-    let customWidths = [];
+    const customWidths = [];
 
     group && group.forEach(btn => {
       this._btnWidth(btn) ? customWidths.push(this._btnWidth(btn)) : null;
     });
 
-    let customWidthTotal = customWidths.reduce((a, b) => a + b, 0);
-    let defaultWidth = (width - customWidthTotal)/(5 - customWidths.length);
-    let defaultWidthsTotal = ((group ? group.length : 0) - customWidths.length) * defaultWidth;
+    const customWidthTotal = customWidths.reduce((a, b) => a + b, 0);
+    const defaultWidth = (width - customWidthTotal) / (5 - customWidths.length);
+    const defaultWidthsTotal = ((group ? group.length : 0) - customWidths.length) * defaultWidth;
 
     this.setState({
       btnWidthDefault: defaultWidth,
@@ -356,7 +356,7 @@ class SwipeableView extends Component {
 
   _setBtnsWidth(btns) {
     const { btnWidthDefault } = this.state;
-    let btnWidths = [];
+    const btnWidths = [];
 
     btns && btns.forEach(btn => {
       btnWidths.push(this._btnWidth(btn) ? this._btnWidth(btn) : btnWidthDefault);
@@ -377,7 +377,7 @@ class SwipeableView extends Component {
   }
 
   _measureSwipeout() {
-    this.refs.swipeout.measure((a, b, width, height, px, py) => {
+    this.refs.swipeout.measure((a, b, width, height) => {
       const { slideoutComponents } = this.props;
 
       this.setState({
@@ -390,12 +390,12 @@ class SwipeableView extends Component {
     });
   }
 
-  _returnBtnDimensions(i) {
+  _returnBtnDimensions() {
     const { height, width } = this.state;
 
     return {
       height: height,
-      width: width
+      width: width,
     };
   }
 
@@ -414,7 +414,6 @@ class SwipeableView extends Component {
     }
 
     return this.props.slideoutComponents.map((btn, i) => {
-      const panDimensions = this._returnBtnDimensions(i);
       const btnProps = btn.props ? btn.props : [];
 
       return (
@@ -436,7 +435,7 @@ class SwipeableView extends Component {
     let slideoutComponents;
     if (this.state.isSwipeableViewRendered && this.state.rowHeight) {
       slideoutComponents = (
-        <View style={[styles.slideOutContainer, {height: this.state.rowHeight}]}>
+        <View style={[styles.slideOutContainer, { height: this.state.rowHeight }]}>
           <View style={ styles.btnsContainer }>
             { this._renderSlideoutBtns() }
           </View>
@@ -462,6 +461,7 @@ class SwipeableView extends Component {
       </View>
     );
   }
-};
+
+}
 
 module.exports = SwipeableView;
