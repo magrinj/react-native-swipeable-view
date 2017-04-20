@@ -62,11 +62,6 @@ const RIGHT_SWIPE_THRESHOLD = 30 * SLOW_SPEED_SWIPE_FACTOR;
 class SwipeableView extends Component {
 
   static propTypes = {
-    sectionID: PropTypes.string,
-    rowID: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-    ]),
     children: PropTypes.any,
     isOpen: PropTypes.bool,
     onOpen: PropTypes.func,
@@ -264,20 +259,20 @@ class SwipeableView extends Component {
   }
 
   _handlePanResponderEnd(event, gestureState) {
-    const { onOpen, onClose, onSwipeEnd, isRTL, sectionID, rowID } = this.props;
+    const { onOpen, onClose, onSwipeEnd, isRTL } = this.props;
     const horizontalDistance = isRTL ? -gestureState.dx : gestureState.dx;
 
     if (this._isSwipingRightFromClosed(gestureState)) {
-      onOpen && onOpen(sectionID, rowID);
+      onOpen && onOpen();
       this._animateBounceBack(RIGHT_SWIPE_BOUNCE_BACK_DURATION);
     } else if (this._shouldAnimateRemainder(gestureState)) {
       if (horizontalDistance < 0) {
         // Swiped left
-        onOpen && onOpen(sectionID, rowID);
+        onOpen && onOpen();
         this._animateToOpenPositionWith(gestureState.vx, horizontalDistance);
       } else {
         // Swiped right
-        onClose && onClose(sectionID, rowID);
+        onClose && onClose();
         this._animateToClosedPosition();
       }
     } else {
