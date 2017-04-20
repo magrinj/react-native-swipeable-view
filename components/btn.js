@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: '#fff',
-    textAlign: 'center',
   },
 });
 
@@ -47,7 +46,6 @@ class Btn extends Component {
     underlayColor: PropTypes.string,
     background: (TouchableNativeFeedback.propTypes) ? TouchableNativeFeedback.propTypes.background : PropTypes.any,
     panDimensions: PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired,
     component: PropTypes.node,
     text: PropTypes.string,
     type: PropTypes.string,
@@ -78,19 +76,19 @@ class Btn extends Component {
   }
 
   render() {
-    const { panDimensions, style, text, width, component, type, ...btnProps } = this.props;
-    const setWidth = { width: Math.ceil(width) };
+    const { panDimensions, style, text, component, type, ...btnProps } = this.props;
 
     // unused, but remove from btnProps
     type;
 
     return (
-      <View style={[panDimensions]}>
-        <NativeButton {...btnProps} style={[styles.btn, this.setTypeStyle(), style]}>
-          { component ?
-            component
-            :
-            (<Text style={[styles.btnText, setWidth]}>{text}</Text>)
+      <View style={ [ panDimensions ] }>
+        <NativeButton
+          style={ [ styles.btn, this.setTypeStyle(), style ] }
+          textStyle={ styles.btnText }
+          {...btnProps}>
+          {
+            component ? component : text
           }
         </NativeButton>
       </View>
