@@ -95,6 +95,7 @@ class SwipeableView extends Component {
     onSwipeStart: () => {},
     swipeThreshold: 30,
     autoClose: false,
+    isRTL: false,
   };
 
   constructor(props) {
@@ -226,7 +227,7 @@ class SwipeableView extends Component {
      * at the same speed the user swiped (or the speed threshold)
      */
     const duration = Math.abs((maxSwipeDistance - Math.abs(distMoved)) / speed);
-    this._animateTo(isRTL ? maxSwipeDistance : maxSwipeDistance, duration);
+    this._animateTo(isRTL ? maxSwipeDistance : -maxSwipeDistance, duration);
   }
 
   _animateBounceBack(duration) {
