@@ -13,67 +13,6 @@ import {
   View,
 } from 'react-native';
 
-class Btn extends Component {
-
-  static propTypes = {
-    ...TouchableWithoutFeedback.propTypes,
-    textStyle: Text.propTypes.style,
-    disabledStyle: Text.propTypes.style,
-    underlayColor: PropTypes.string,
-    background: (TouchableNativeFeedback.propTypes) ? TouchableNativeFeedback.propTypes.background : PropTypes.any,
-    panDimensions: PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired,
-    component: PropTypes.node,
-    text: PropTypes.string,
-    type: PropTypes.string,
-  };
-
-  static defaultProps = {
-    component: null,
-    text: 'Click Me',
-    type: null,
-  };
-
-  setTypeStyle(element) {
-    switch (this.props.type) {
-      case "danger":
-      case "delete":
-        return styles.btnDanger;
-        break;
-      case "primary":
-        return styles.btnPrimary;
-        break;
-      case "secondary":
-        return styles.btnSecondary;
-        break;
-      case "success":
-        return styles.btnSuccess;
-      default:
-        return {};
-        break;
-    }
-  }
-
-  render() {
-    let { panDimensions, style, text, width, component, type, ...btnProps } = this.props;
-    let setWidth = { width: Math.ceil(width) };
-
-    return (
-      <View style={[panDimensions]}>
-        <NativeButton {...btnProps} style={[styles.btn, this.setTypeStyle(), style]}>
-          { component ?
-            component
-            :
-            (<Text style={[styles.btnText, setWidth]}>{text}</Text>)
-          }
-        </NativeButton>
-      </View>
-    );
-  }
-}
-
-/* Style */
-
 const styles = StyleSheet.create({
   btn: {
     backgroundColor: '#b6bec0',
@@ -98,5 +37,65 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+class Btn extends Component {
+
+  static propTypes = {
+    ...TouchableWithoutFeedback.propTypes,
+    textStyle: Text.propTypes.style,
+    disabledStyle: Text.propTypes.style,
+    underlayColor: PropTypes.string,
+    background: (TouchableNativeFeedback.propTypes) ? TouchableNativeFeedback.propTypes.background : PropTypes.any,
+    panDimensions: PropTypes.object.isRequired,
+    width: PropTypes.number.isRequired,
+    component: PropTypes.node,
+    text: PropTypes.string,
+    type: PropTypes.string,
+  };
+
+  static defaultProps = {
+    component: null,
+    text: 'Click Me',
+    type: null,
+  };
+
+  setTypeStyle() {
+    const { type } = this.props;
+
+    switch (type) {
+      case 'danger':
+      case 'delete':
+        return styles.btnDanger;
+      case 'primary':
+        return styles.btnPrimary;
+      case 'secondary':
+        return styles.btnSecondary;
+      case 'success':
+        return styles.btnSuccess;
+      default:
+        return {};
+    }
+  }
+
+  render() {
+    const { panDimensions, style, text, width, component, type, ...btnProps } = this.props;
+    const setWidth = { width: Math.ceil(width) };
+
+    // unused, but remove from btnProps
+    type;
+
+    return (
+      <View style={[panDimensions]}>
+        <NativeButton {...btnProps} style={[styles.btn, this.setTypeStyle(), style]}>
+          { component ?
+            component
+            :
+            (<Text style={[styles.btnText, setWidth]}>{text}</Text>)
+          }
+        </NativeButton>
+      </View>
+    );
+  }
+}
 
 export default Btn;

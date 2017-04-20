@@ -30,5 +30,11 @@
   "homepage": "https://gitlab.com/magrin_j/react-native-swipeable-view",
   "peerDependencies": {
     "react-native": ">=0.20.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.18.0",
+    "eslint-plugin-flowtype": "^2.30.3",
+    "eslint-plugin-react": "^6.10.2"
   }
 }

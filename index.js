@@ -74,13 +74,17 @@ class SwipeableView extends Component {
     /**
      * A ReactElement that is unveiled when the user swipes
      */
-    slideoutComponents: PropTypes.array.isRequired,
+    btnsArray: PropTypes.array.isRequired,
     /**
      * The minimum swipe distance required before fully animating the swipe. If
      * the user swipes less than this distance, the item will return to its
      * previous (open/close) position.
      */
     swipeThreshold: PropTypes.number,
+    /**
+     * True/false if the current language is right to left
+     */
+    isRTL: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -90,7 +94,9 @@ class SwipeableView extends Component {
     onSwipeEnd: () => {},
     onSwipeStart: () => {},
     swipeThreshold: 30,
+    shouldBounceOnMount: false,
     autoClose: false,
+    isRTL: false,
   };
 
   constructor(props) {
@@ -126,7 +132,7 @@ class SwipeableView extends Component {
       onPanResponderRelease: this._handlePanResponderEnd.bind(this),
       onPanResponderTerminationRequest: this._onPanResponderTerminationRequest.bind(this),
       onPanResponderTerminate: this._handlePanResponderEnd.bind(this),
-      onShouldBlockNativeResponder: (event, gestureState) => false,
+      onShouldBlockNativeResponder: () => false,
     });
   }
 
@@ -163,7 +169,7 @@ class SwipeableView extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const { shouldBounceOnMount } = this.props;
 
     if (shouldBounceOnMount && !nextProps.shouldBounceOnMount) {
@@ -174,7 +180,7 @@ class SwipeableView extends Component {
     return true;
   }
 
-  _onPanResponderTerminationRequest(event, gestureState) {
+  _onPanResponderTerminationRequest() {
     return false;
   }
 
@@ -200,11 +206,13 @@ class SwipeableView extends Component {
   }
 
   _animateToOpenPosition() {
+    const { isRTL } = this.props;
     const { maxSwipeDistance } = this.state;
-    this._animateTo(-maxSwipeDistance);
+    this._animateTo(isRTL ? maxSwipeDistance : -maxSwipeDistance);
   }
 
   _animateToOpenPositionWith(speed, distMoved) {
+    const { isRTL } = this.props;
     const { maxSwipeDistance } = this.state;
     /**
      * Ensure the speed is at least the set speed threshold to prevent a slow
@@ -220,7 +228,7 @@ class SwipeableView extends Component {
      * at the same speed the user swiped (or the speed threshold)
      */
     const duration = Math.abs((maxSwipeDistance - Math.abs(distMoved)) / speed);
-    this._animateTo(-maxSwipeDistance, duration);
+    this._animateTo(isRTL ? maxSwipeDistance : -maxSwipeDistance, duration);
   }
 
   _animateBounceBack(duration) {
@@ -228,7 +236,10 @@ class SwipeableView extends Component {
      * When swiping right, we want to bounce back past closed position on release
      * so users know they should swipe right to get content.
      */
-    const swipeBounceBackDistance = RIGHT_SWIPE_BOUNCE_BACK_DISTANCE;
+    const { isRTL } = this.props;
+    const swipeBounceBackDistance = isRTL ?
+      -RIGHT_SWIPE_BOUNCE_BACK_DISTANCE :
+      RIGHT_SWIPE_BOUNCE_BACK_DISTANCE;
     this._animateTo(
       -swipeBounceBackDistance,
       duration,
@@ -248,8 +259,8 @@ class SwipeableView extends Component {
   }
 
   _handlePanResponderEnd(event, gestureState) {
-    const { onOpen, onClose, onSwipeEnd } = this.props;
-    const horizontalDistance = gestureState.dx;
+    const { onOpen, onClose, onSwipeEnd, isRTL } = this.props;
+    const horizontalDistance = isRTL ? -gestureState.dx : gestureState.dx;
 
     if (this._isSwipingRightFromClosed(gestureState)) {
       onOpen && onOpen();
@@ -286,7 +297,8 @@ class SwipeableView extends Component {
   }
 
   _isSwipingRightFromClosed(gestureState) {
-    const gestureStateDx = gestureState.dx;
+    const { isRTL } = this.props;
+    const gestureStateDx = isRTL ? -gestureState.dx : gestureState.dx;
     return this._previousLeft === CLOSED_LEFT_POSITION && gestureStateDx > 0;
   }
 
@@ -296,7 +308,8 @@ class SwipeableView extends Component {
      * swiping is available, but swiping right does not do anything
      * functionally.
      */
-    const gestureStateDx = gestureState.dx;
+    const { isRTL } = this.props;
+    const gestureStateDx = isRTL ? -gestureState.dx : gestureState.dx;
     return (
       this._isSwipingRightFromClosed(gestureState) &&
       gestureStateDx > RIGHT_SWIPE_THRESHOLD
@@ -319,7 +332,7 @@ class SwipeableView extends Component {
     }
   }
 
-  _handlePanResponderGrant(event, gestureState) {
+  _handlePanResponderGrant() {
   }
 
   _handleMoveShouldSetPanResponderCapture(event, gestureState) {
@@ -332,20 +345,20 @@ class SwipeableView extends Component {
   }
 
   _btnWidth(btn) {
-    let hasCustomWidth = btn.props && btn.props.style && btn.props.style.width;
+    const hasCustomWidth = btn.props && btn.props.style && btn.props.style.width;
     return hasCustomWidth ? btn.props.style.width : false;
   }
 
   _btnsWidthTotal(width, group) {
-    let customWidths = [];
+    const customWidths = [];
 
     group && group.forEach(btn => {
       this._btnWidth(btn) ? customWidths.push(this._btnWidth(btn)) : null;
     });
 
-    let customWidthTotal = customWidths.reduce((a, b) => a + b, 0);
-    let defaultWidth = (width - customWidthTotal)/(5 - customWidths.length);
-    let defaultWidthsTotal = ((group ? group.length : 0) - customWidths.length) * defaultWidth;
+    const customWidthTotal = customWidths.reduce((a, b) => a + b, 0);
+    const defaultWidth = (width - customWidthTotal) / (5 - customWidths.length);
+    const defaultWidthsTotal = ((group ? group.length : 0) - customWidths.length) * defaultWidth;
 
     this.setState({
       btnWidthDefault: defaultWidth,
@@ -356,7 +369,7 @@ class SwipeableView extends Component {
 
   _setBtnsWidth(btns) {
     const { btnWidthDefault } = this.state;
-    let btnWidths = [];
+    const btnWidths = [];
 
     btns && btns.forEach(btn => {
       btnWidths.push(this._btnWidth(btn) ? this._btnWidth(btn) : btnWidthDefault);
@@ -377,25 +390,25 @@ class SwipeableView extends Component {
   }
 
   _measureSwipeout() {
-    this.refs.swipeout.measure((a, b, width, height, px, py) => {
-      const { slideoutComponents } = this.props;
+    this.refs.swipeout.measure((a, b, width, height) => {
+      const { btnsArray } = this.props;
 
       this.setState({
         height: height,
         width: width,
-        maxSwipeDistance: this._btnsWidthTotal(width, slideoutComponents),
+        maxSwipeDistance: this._btnsWidthTotal(width, btnsArray),
       });
 
-      this._setBtnsWidth(slideoutComponents);
+      this._setBtnsWidth(btnsArray);
     });
   }
 
-  _returnBtnDimensions(i) {
+  _returnBtnDimensions() {
     const { height, width } = this.state;
 
     return {
       height: height,
-      width: width
+      width: width,
     };
   }
 
@@ -413,8 +426,7 @@ class SwipeableView extends Component {
       return false;
     }
 
-    return this.props.slideoutComponents.map((btn, i) => {
-      const panDimensions = this._returnBtnDimensions(i);
+    return this.props.btnsArray.map((btn, i) => {
       const btnProps = btn.props ? btn.props : [];
 
       return (
@@ -432,12 +444,13 @@ class SwipeableView extends Component {
   }
 
   render() {
+    const { isRTL } = this.props;
     // The view hidden behind the main view
-    let slideoutComponents;
+    let btnsArray;
     if (this.state.isSwipeableViewRendered && this.state.rowHeight) {
-      slideoutComponents = (
-        <View style={[styles.slideOutContainer, {height: this.state.rowHeight}]}>
-          <View style={ styles.btnsContainer }>
+      btnsArray = (
+        <View style={[styles.slideOutContainer, { height: this.state.rowHeight }]}>
+          <View style={[ styles.btnsContainer, isRTL ? { justifyContent: 'flex-start' } : { justifyContent: 'flex-end' } ]}>
             { this._renderSlideoutBtns() }
           </View>
         </View>
@@ -457,11 +470,12 @@ class SwipeableView extends Component {
       <View
         ref="swipeout"
         {...this._panResponder.panHandlers}>
-        {slideoutComponents}
+        {btnsArray}
         {swipeableView}
       </View>
     );
   }
-};
+
+}
 
 module.exports = SwipeableView;

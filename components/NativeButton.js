@@ -1,4 +1,5 @@
 import React, {
+  Component,
   PropTypes,
 } from 'react';
 
@@ -27,9 +28,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const NativeButton = React.createClass({
+class NativeButton extends Component {
 
-  propTypes: {
+  static propTypes = {
     // Extract parent props
     ...TouchableWithoutFeedback.propTypes,
     textStyle: Text.propTypes.style,
@@ -37,21 +38,21 @@ const NativeButton = React.createClass({
     children: PropTypes.node.isRequired,
     underlayColor: PropTypes.string,
     background: (TouchableNativeFeedback.propTypes) ? TouchableNativeFeedback.propTypes.background : PropTypes.any,
-  },
+  };
 
-  statics: {
-    isAndroid: (Platform.OS === 'android'),
-  },
+  static defaultProps = {
+    textStyle: null,
+    disabledStyle: null,
+    underlayColor: null,
+  };
 
-  getDefaultProps: function() {
-    return {
-      textStyle: null,
-      disabledStyle: null,
-      underlayColor: null,
-    };
-  },
+  static isAndroid = (Platform.OS === 'android');
 
-  setNativeProps: function(props) {
+  constructor(props) {
+    super(props);
+  }
+
+  setNativeProps(props) {
     if (this.refs.TouchableNativeFeedbackChild) {
       this.refs.TouchableNativeFeedbackChild.setNativeProps(props);
     }
@@ -59,9 +60,9 @@ const NativeButton = React.createClass({
     if (this.refs.TouchableHighlightChild) {
       this.refs.TouchableHighlightChild.setNativeProps(props);
     }
-  },
+  }
 
-  _renderText: function() {
+  _renderText() {
     // If children is not a string don't wrapp it in a Text component
     if (typeof this.props.children !== 'string') {
       return this.props.children;
@@ -72,9 +73,9 @@ const NativeButton = React.createClass({
         { this.props.children }
       </Text>
     );
-  },
+  }
 
-  render: function() {
+  render() {
     const disabledStyle = this.props.disabled ? (this.props.disabledStyle || styles.opacity) : {};
 
     // Extract Button props
@@ -123,6 +124,7 @@ const NativeButton = React.createClass({
       </TouchableHighlight>
     );
   }
-});
+
+}
 
 export default NativeButton;
