@@ -3,7 +3,7 @@
 This library allow you to create swipeable component, by exemple for a row in a list view, or anywhere you want.
 The code is based on the experimental SwipeableListView of react-native.
 
-![swipe](https://cloud.githubusercontent.com/assets/3551795/25225043/6f3b91ae-25c0-11e7-9cd9-e3e77fdf6d5e.gif)
+![swipe](https://cloud.githubusercontent.com/assets/3551795/25225308/45494d9a-25c1-11e7-830f-defea7a8262d.gif)
 
 ## Installation
 
