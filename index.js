@@ -443,12 +443,13 @@ class SwipeableView extends Component {
   }
 
   render() {
+    const { isRTL } = this.props;
     // The view hidden behind the main view
     let btnsArray;
     if (this.state.isSwipeableViewRendered && this.state.rowHeight) {
       btnsArray = (
         <View style={[styles.slideOutContainer, { height: this.state.rowHeight }]}>
-          <View style={ styles.btnsContainer }>
+          <View style={[ styles.btnsContainer, isRTL ? { justifyContent: 'flex-start' } : { justifyContent: 'flex-end' } ]}>
             { this._renderSlideoutBtns() }
           </View>
         </View>
