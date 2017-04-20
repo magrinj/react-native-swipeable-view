@@ -94,6 +94,7 @@ class SwipeableView extends Component {
     onSwipeEnd: () => {},
     onSwipeStart: () => {},
     swipeThreshold: 30,
+    shouldBounceOnMount: false,
     autoClose: false,
     isRTL: false,
   };
