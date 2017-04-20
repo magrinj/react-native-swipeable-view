@@ -436,7 +436,6 @@ class SwipeableView extends Component {
           text={btn.text}
           type={btn.type}
           component={btn.component}
-          width={btnWidths[i]}
           {...btnProps}
           onPress={() => this._handleBtnPress(btn)}/>
       );
