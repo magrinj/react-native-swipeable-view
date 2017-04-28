@@ -122,6 +122,8 @@ class SwipeableView extends Component {
       rowHeight: null,
       maxSwipeDistance: 0,
     };
+
+    this._swipeoutRef = null;
   }
 
   componentWillMount() {
@@ -390,17 +392,19 @@ class SwipeableView extends Component {
   }
 
   _measureSwipeout() {
-    this.refs.swipeout.measure((a, b, width, height) => {
-      const { btnsArray } = this.props;
+    if (this._swipeoutRef) {
+      this._swipeoutRef.measure((a, b, width, height) => {
+        const { btnsArray } = this.props;
 
-      this.setState({
-        height: height,
-        width: width,
-        maxSwipeDistance: this._btnsWidthTotal(width, btnsArray),
+        this.setState({
+          height: height,
+          width: width,
+          maxSwipeDistance: this._btnsWidthTotal(width, btnsArray),
+        });
+
+        this._setBtnsWidth(btnsArray);
       });
-
-      this._setBtnsWidth(btnsArray);
-    });
+    }
   }
 
   _returnBtnDimensions() {
@@ -467,7 +471,7 @@ class SwipeableView extends Component {
 
     return (
       <View
-        ref="swipeout"
+        ref={ (ref) => (this._swipeoutRef = ref) }
         {...this._panResponder.panHandlers}>
         {btnsArray}
         {swipeableView}
