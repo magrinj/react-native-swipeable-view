@@ -472,7 +472,8 @@ class SwipeableView extends Component {
     return (
       <View
         ref={ (ref) => (this._swipeoutRef = ref) }
-        {...this._panResponder.panHandlers}>
+        {...this._panResponder.panHandlers}
+        collapsable={false}>
         {btnsArray}
         {swipeableView}
       </View>
