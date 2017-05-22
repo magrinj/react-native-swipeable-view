@@ -192,6 +192,7 @@ class SwipeableView extends Component {
       {
         duration,
         toValue,
+        useNativeDriver: true,
       },
     ).start(() => {
       this._previousLeft = toValue;
