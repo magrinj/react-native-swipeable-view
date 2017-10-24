@@ -2,7 +2,6 @@ import NativeButton from './NativeButton';
 
 import React, {
   Component,
-  PropTypes,
 } from 'react';
 
 import {
@@ -12,6 +11,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+
+import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   btn: {
