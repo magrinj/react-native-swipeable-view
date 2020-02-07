@@ -11,6 +11,8 @@ The code is based on the experimental SwipeableListView of react-native.
 npm install --save react-native-swipeable-view
 ```
 
+If using React Native < 0.54, you must stay at <= 1.0.0.
+
 ## Usage example
 
 ```
@@ -36,7 +38,7 @@ var btnsArray = [
 
 Prop                | Type   | Optional | Default   | Description
 ------------------- | ------ | -------- | --------- | -----------
-isOpen              | bool   | Yes      | false     | Swipeout is open or not
+isOpen              | bool   | Yes      | false     | Swipeout is open or not. CHanging this value will animate the Swipeout open or closed.
 autoClose           | bool   | Yes      | false     | Auto-Close on button press
 btnsArray           | array  | No       | []        | Swipe buttons array
 onOpen              | func   | Yes      |           | Callback when swipe is opened
