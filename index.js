@@ -167,6 +167,8 @@ class SwipeableView extends Component {
      */
     if (prevProps.isOpen && !isOpen) {
       this._animateToClosedPosition();
+    } else if (!prevProps.isOpen && isOpen) {
+      this._animateToOpenPosition();
     }
   }
 
