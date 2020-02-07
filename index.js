@@ -125,9 +125,7 @@ class SwipeableView extends Component {
     };
 
     this._swipeoutRef = null;
-  }
 
-  componentWillMount() {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponderCapture: this._handleMoveShouldSetPanResponderCapture,
       onPanResponderGrant: this._handlePanResponderGrant,
