@@ -129,12 +129,12 @@ class SwipeableView extends Component {
 
   componentWillMount() {
     this._panResponder = PanResponder.create({
-      onMoveShouldSetPanResponderCapture: this._handleMoveShouldSetPanResponderCapture.bind(this),
-      onPanResponderGrant: this._handlePanResponderGrant.bind(this),
-      onPanResponderMove: this._handlePanResponderMove.bind(this),
-      onPanResponderRelease: this._handlePanResponderEnd.bind(this),
-      onPanResponderTerminationRequest: this._onPanResponderTerminationRequest.bind(this),
-      onPanResponderTerminate: this._handlePanResponderEnd.bind(this),
+      onMoveShouldSetPanResponderCapture: this._handleMoveShouldSetPanResponderCapture,
+      onPanResponderGrant: this._handlePanResponderGrant,
+      onPanResponderMove: this._handlePanResponderMove,
+      onPanResponderRelease: this._handlePanResponderEnd,
+      onPanResponderTerminationRequest: this._onPanResponderTerminationRequest,
+      onPanResponderTerminate: this._handlePanResponderEnd,
       onShouldBlockNativeResponder: () => false,
     });
   }
@@ -152,7 +152,7 @@ class SwipeableView extends Component {
       }, ON_MOUNT_BOUNCE_DELAY);
     }
 
-    setTimeout(this._measureSwipeout.bind(this));
+    setTimeout(this._measureSwipeout);
   }
 
   componentWillUnmount() {
@@ -183,7 +183,7 @@ class SwipeableView extends Component {
     return true;
   }
 
-  _onPanResponderTerminationRequest() {
+  _onPanResponderTerminationRequest = () => {
     return false;
   }
 
@@ -204,7 +204,7 @@ class SwipeableView extends Component {
     this._animateTo(CLOSED_LEFT_POSITION, duration);
   }
 
-  _animateToClosedPositionDuringBounce() {
+  _animateToClosedPositionDuringBounce = () => {
     this._animateToClosedPosition(RIGHT_SWIPE_BOUNCE_BACK_DURATION);
   }
 
@@ -246,7 +246,7 @@ class SwipeableView extends Component {
     this._animateTo(
       -swipeBounceBackDistance,
       duration,
-      this._animateToClosedPositionDuringBounce.bind(this),
+      this._animateToClosedPositionDuringBounce,
     );
   }
 
@@ -261,7 +261,7 @@ class SwipeableView extends Component {
     );
   }
 
-  _handlePanResponderEnd(event, gestureState) {
+  _handlePanResponderEnd = (event, gestureState) => {
     const { onOpen, onClose, onSwipeEnd, isRTL } = this.props;
     const horizontalDistance = isRTL ? -gestureState.dx : gestureState.dx;
 
@@ -319,7 +319,7 @@ class SwipeableView extends Component {
     );
   }
 
-  _handlePanResponderMove(event, gestureState) {
+  _handlePanResponderMove = (event, gestureState) => {
     const { onSwipeStart } = this.props;
 
     if (this._isSwipingExcessivelyRightFromClosedPosition(gestureState)) {
@@ -335,10 +335,10 @@ class SwipeableView extends Component {
     }
   }
 
-  _handlePanResponderGrant() {
+  _handlePanResponderGrant = () => {
   }
 
-  _handleMoveShouldSetPanResponderCapture(event, gestureState) {
+  _handleMoveShouldSetPanResponderCapture = (event, gestureState) => {
     // Decides whether a swipe is responded to by this component or its child
     return gestureState.dy < 10 && this._isValidSwipe(gestureState);
   }
@@ -392,7 +392,7 @@ class SwipeableView extends Component {
     }
   }
 
-  _measureSwipeout() {
+  _measureSwipeout = () => {
     if (this._swipeoutRef) {
       this._swipeoutRef.measure((a, b, width, height) => {
         const { btnsArray } = this.props;
@@ -417,7 +417,7 @@ class SwipeableView extends Component {
     };
   }
 
-  _onSwipeableViewLayout(event) {
+  _onSwipeableViewLayout = (event) => {
     this.setState({
       isSwipeableViewRendered: true,
       rowHeight: event.nativeEvent.layout.height,
@@ -464,7 +464,7 @@ class SwipeableView extends Component {
     // The swipeable item
     const swipeableView = (
       <Animated.View
-        onLayout={this._onSwipeableViewLayout.bind(this)}
+        onLayout={this._onSwipeableViewLayout}
         style={{transform: [{translateX: this.state.currentLeft}], backgroundColor: 'white'}}>
         {this.props.children}
       </Animated.View>
