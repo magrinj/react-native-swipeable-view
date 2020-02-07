@@ -159,13 +159,13 @@ class SwipeableView extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const { isOpen } = this.props;
     /**
      * We do not need an "animateOpen(noCallback)" because this animation is
      * handled internally by this component.
      */
-    if (isOpen && !nextProps.isOpen) {
+    if (prevProps.isOpen && !isOpen) {
       this._animateToClosedPosition();
     }
   }
