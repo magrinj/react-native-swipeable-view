@@ -149,8 +149,6 @@ class SwipeableView extends Component {
         this._animateBounceBack(ON_MOUNT_BOUNCE_DURATION);
       }, ON_MOUNT_BOUNCE_DELAY);
     }
-
-    setTimeout(this._measureSwipeout);
   }
 
   componentWillUnmount() {
@@ -473,6 +471,7 @@ class SwipeableView extends Component {
     return (
       <View
         ref={ (ref) => (this._swipeoutRef = ref) }
+        onLayout={this._measureSwipeout}
         {...this._panResponder.panHandlers}
         collapsable={false}>
         {btnsArray}
